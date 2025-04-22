@@ -15,7 +15,6 @@ public class Main {
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        // Inițializarea bazei de date
         DatabaseConnection.initializeDatabase();
 
         while (true) {
@@ -51,80 +50,80 @@ public class Main {
                     viewAllSuppliers();
                     break;
                 case 10:
-                    System.out.println("Ieșire...");
+                    System.out.println("Exiting...");
                     return;
                 default:
-                    System.out.println("Opțiune invalidă! Încercați din nou.");
+                    System.out.println("Invalid option! Try again.");
             }
         }
     }
 
     private static void showMenu() {
-        System.out.println("\nMeniu:");
-        System.out.println("1. Adăugare produs");
-        System.out.println("2. Actualizare produs");
-        System.out.println("3. Ștergere produs");
-        System.out.println("4. Vizualizare toate produsele");
-        System.out.println("5. Căutare produs după ID");
-        System.out.println("6. Adăugare furnizor");
-        System.out.println("7. Actualizare furnizor");
-        System.out.println("8. Ștergere furnizor");
-        System.out.println("9. Vizualizare toți furnizorii");
-        System.out.println("10. Ieșire");
-        System.out.print("Alege o opțiune: ");
+        System.out.println("\nMenu:");
+        System.out.println("1. Add product");
+        System.out.println("2. Update product");
+        System.out.println("3. Delete product");
+        System.out.println("4. View all products");
+        System.out.println("5. Search product by ID");
+        System.out.println("6. Add supplier");
+        System.out.println("7. Update supplier");
+        System.out.println("8. Delete supplier");
+        System.out.println("9. View all suppliers");
+        System.out.println("10. Exit");
+        System.out.print("Choose an option: ");
     }
 
     private static int getUserChoice() {
         while (!scanner.hasNextInt()) {
-            System.out.print("Introducere invalidă. Te rog introdu o opțiune validă: ");
-            scanner.next(); // Consuma inputul invalid
+            System.out.print("Invalid input. Please enter a valid option: ");
+            scanner.next();
         }
         return scanner.nextInt();
     }
 
     private static void addProduct() {
-        System.out.println("\nIntroducere detalii produs:");
+        System.out.println("\nEnter product details:");
         System.out.print("ID: ");
         int id = scanner.nextInt();
-        scanner.nextLine();  // Consumă linia rămasă
-        System.out.print("Nume: ");
+        scanner.nextLine();
+        System.out.print("Name: ");
         String name = scanner.nextLine();
-        System.out.print("Descriere: ");
+        System.out.print("Description: ");
         String description = scanner.nextLine();
-        System.out.print("Preț: ");
+        System.out.print("Price: ");
         double price = scanner.nextDouble();
-        System.out.print("Cantitate în stoc: ");
+        System.out.print("Stock quantity: ");
         int quantity = scanner.nextInt();
-        scanner.nextLine();  // Consumă linia rămasă
-        System.out.print("Categorie: ");
+        scanner.nextLine();
+        System.out.print("Category: ");
         String category = scanner.nextLine();
 
         Product product = new Product(id, name, description, price, quantity, category);
         try {
             productDAO.addProduct(product);
-            System.out.println("Produs adăugat cu succes!");
+            System.out.println("Product added successfully!");
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     private static void updateProduct() {
-        System.out.print("\nIntroducere ID produs de actualizat: ");
+        System.out.print("\nEnter product ID to update: ");
         int id = scanner.nextInt();
-        scanner.nextLine();  // Consumă linia rămasă
+        scanner.nextLine();
         try {
             Product product = productDAO.getProductById(id);
             if (product != null) {
-                System.out.print("Nume nou: ");
+                System.out.print("New name: ");
                 String name = scanner.nextLine();
-                System.out.print("Descriere nouă: ");
+                System.out.print("New description: ");
                 String description = scanner.nextLine();
-                System.out.print("Preț nou: ");
+                System.out.print("New price: ");
                 double price = scanner.nextDouble();
-                System.out.print("Cantitate nouă în stoc: ");
+                System.out.print("New stock quantity: ");
                 int quantity = scanner.nextInt();
-                scanner.nextLine();  // Consumă linia rămasă
-                System.out.print("Categorie nouă: ");
+                scanner.nextLine();
+                System.out.print("New category: ");
                 String category = scanner.nextLine();
 
                 product.setName(name);
@@ -134,9 +133,9 @@ public class Main {
                 product.setCategory(category);
 
                 productDAO.updateProduct(product);
-                System.out.println("Produs actualizat cu succes!");
+                System.out.println("Product updated successfully!");
             } else {
-                System.out.println("Produsul cu ID-ul " + id + " nu a fost găsit.");
+                System.out.println("Product with ID " + id + " not found.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -144,11 +143,11 @@ public class Main {
     }
 
     private static void deleteProduct() {
-        System.out.print("\nIntroducere ID produs de șters: ");
+        System.out.print("\nEnter product ID to delete: ");
         int id = scanner.nextInt();
         try {
             productDAO.deleteProduct(id);
-            System.out.println("Produs șters cu succes!");
+            System.out.println("Product deleted successfully!");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -157,7 +156,7 @@ public class Main {
     private static void viewAllProducts() {
         try {
             List<Product> products = productDAO.getAllProducts();
-            System.out.println("\nProduse:");
+            System.out.println("\nProducts:");
             for (Product product : products) {
                 System.out.println(product);
             }
@@ -167,14 +166,14 @@ public class Main {
     }
 
     private static void findProductById() {
-        System.out.print("\nIntroducere ID produs de căutat: ");
+        System.out.print("\nEnter product ID to search: ");
         int id = scanner.nextInt();
         try {
             Product product = productDAO.getProductById(id);
             if (product != null) {
-                System.out.println("Produs găsit: " + product);
+                System.out.println("Product found: " + product);
             } else {
-                System.out.println("Produsul cu ID-ul " + id + " nu a fost găsit.");
+                System.out.println("Product with ID " + id + " not found.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -182,38 +181,38 @@ public class Main {
     }
 
     private static void addSupplier() {
-        System.out.println("\nIntroducere detalii furnizor:");
+        System.out.println("\nEnter supplier details:");
         System.out.print("ID: ");
         int id = scanner.nextInt();
-        scanner.nextLine();  // Consumă linia rămasă
-        System.out.print("Nume: ");
+        scanner.nextLine();  // Consume newline left-over
+        System.out.print("Name: ");
         String name = scanner.nextLine();
-        System.out.print("Informații contact: ");
+        System.out.print("Contact info: ");
         String contactInfo = scanner.nextLine();
-        System.out.print("Adresă: ");
+        System.out.print("Address: ");
         String address = scanner.nextLine();
 
         Supplier supplier = new Supplier(id, name, contactInfo, address);
         try {
             supplierDAO.addSupplier(supplier);
-            System.out.println("Furnizor adăugat cu succes!");
+            System.out.println("Supplier added successfully!");
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     private static void updateSupplier() {
-        System.out.print("\nIntroducere ID furnizor de actualizat: ");
+        System.out.print("\nEnter supplier ID to update: ");
         int id = scanner.nextInt();
-        scanner.nextLine();  // Consumă linia rămasă
+        scanner.nextLine();
         try {
             Supplier supplier = supplierDAO.getSupplierById(id);
             if (supplier != null) {
-                System.out.print("Nume nou: ");
+                System.out.print("New name: ");
                 String name = scanner.nextLine();
-                System.out.print("Informații contact noi: ");
+                System.out.print("New contact info: ");
                 String contactInfo = scanner.nextLine();
-                System.out.print("Adresă nouă: ");
+                System.out.print("New address: ");
                 String address = scanner.nextLine();
 
                 supplier.setName(name);
@@ -221,9 +220,9 @@ public class Main {
                 supplier.setAddress(address);
 
                 supplierDAO.updateSupplier(supplier);
-                System.out.println("Furnizor actualizat cu succes!");
+                System.out.println("Supplier updated successfully!");
             } else {
-                System.out.println("Furnizorul cu ID-ul " + id + " nu a fost găsit.");
+                System.out.println("Supplier with ID " + id + " not found.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -231,11 +230,11 @@ public class Main {
     }
 
     private static void deleteSupplier() {
-        System.out.print("\nIntroducere ID furnizor de șters: ");
+        System.out.print("\nEnter supplier ID to delete: ");
         int id = scanner.nextInt();
         try {
             supplierDAO.deleteSupplier(id);
-            System.out.println("Furnizor șters cu succes!");
+            System.out.println("Supplier deleted successfully!");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -244,7 +243,7 @@ public class Main {
     private static void viewAllSuppliers() {
         try {
             List<Supplier> suppliers = supplierDAO.getAllSuppliers();
-            System.out.println("\nFurnizori:");
+            System.out.println("\nSuppliers:");
             for (Supplier supplier : suppliers) {
                 System.out.println(supplier);
             }
