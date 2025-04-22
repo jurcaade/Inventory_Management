@@ -80,21 +80,46 @@ public class Main {
         }
         return scanner.nextInt();
     }
+    private static int getValidIntInput(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            if (scanner.hasNextInt()) {
+                return scanner.nextInt();
+            } else {
+                System.out.println("Invalid input! Please enter a valid integer.");
+                scanner.next();
+            }
+        }
+    }
+
+    private static double getValidDoubleInput(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            if (scanner.hasNextDouble()) {
+                return scanner.nextDouble();
+            } else {
+                System.out.println("Invalid input! Please enter a valid number.");
+                scanner.next();
+            }
+        }
+    }
 
     private static void addProduct() {
         System.out.println("\nEnter product details:");
-        System.out.print("ID: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
+        int id = getValidIntInput("ID: ");  // Use the helper method to validate integer input
+        scanner.nextLine();  // Consume the newline character
+
         System.out.print("Name: ");
         String name = scanner.nextLine();
+
         System.out.print("Description: ");
         String description = scanner.nextLine();
-        System.out.print("Price: ");
-        double price = scanner.nextDouble();
-        System.out.print("Stock quantity: ");
-        int quantity = scanner.nextInt();
+
+        double price = getValidDoubleInput("Price: ");
+
+        int quantity = getValidIntInput("Stock quantity: ");
         scanner.nextLine();
+
         System.out.print("Category: ");
         String category = scanner.nextLine();
 
@@ -106,6 +131,7 @@ public class Main {
             e.printStackTrace();
         }
     }
+
 
     private static void updateProduct() {
         System.out.print("\nEnter product ID to update: ");
@@ -182,13 +208,15 @@ public class Main {
 
     private static void addSupplier() {
         System.out.println("\nEnter supplier details:");
-        System.out.print("ID: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();  // Consume newline left-over
+        int id = getValidIntInput("ID: ");
+        scanner.nextLine();
+
         System.out.print("Name: ");
         String name = scanner.nextLine();
+
         System.out.print("Contact info: ");
         String contactInfo = scanner.nextLine();
+
         System.out.print("Address: ");
         String address = scanner.nextLine();
 
@@ -200,6 +228,7 @@ public class Main {
             e.printStackTrace();
         }
     }
+
 
     private static void updateSupplier() {
         System.out.print("\nEnter supplier ID to update: ");
