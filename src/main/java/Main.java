@@ -50,6 +50,9 @@ public class Main {
                     viewAllSuppliers();
                     break;
                 case 10:
+                    viewProductsBySupplier();
+                    break;
+                case 11:
                     System.out.println("Exiting...");
                     return;
                 default:
@@ -69,7 +72,8 @@ public class Main {
         System.out.println("7. Update supplier");
         System.out.println("8. Delete supplier");
         System.out.println("9. View all suppliers");
-        System.out.println("10. Exit");
+        System.out.println("10. View products by supplier");
+        System.out.println("11. Exit");
         System.out.print("Choose an option: ");
     }
 
@@ -116,20 +120,21 @@ public class Main {
         String description = scanner.nextLine();
 
         double price = getValidDoubleInput("Price: ");
-
         int quantity = getValidIntInput("Stock quantity: ");
         scanner.nextLine();
 
         System.out.print("Category: ");
         String category = scanner.nextLine();
 
-
-        System.out.println("Select Supplier ID from the list of suppliers:");
-        viewAllSuppliers();
-        int supplierId = getValidIntInput("Enter Supplier ID: ");
+        int supplierId = getValidIntInput("Supplier ID: ");
+        scanner.nextLine();
 
         Product product = new Product(id, name, description, price, quantity, category, supplierId);
         try {
+            if (!supplierDAO.supplierExists(supplierId)) {
+                System.out.println("Supplier with ID " + supplierId + " does not exist!");
+                return;
+            }
             productDAO.addProduct(product);
             System.out.println("Product added successfully!");
         } catch (SQLException e) {
@@ -157,12 +162,21 @@ public class Main {
                 scanner.nextLine();
                 System.out.print("New category: ");
                 String category = scanner.nextLine();
+                System.out.print("New supplier ID: ");
+                int supplierId = scanner.nextInt();
+                scanner.nextLine();
 
                 product.setName(name);
                 product.setDescription(description);
                 product.setPrice(price);
                 product.setQuantityInStock(quantity);
                 product.setCategory(category);
+                product.setSupplierId(supplierId);
+
+                if (!supplierDAO.supplierExists(supplierId)) {
+                    System.out.println("Supplier with ID " + supplierId + " does not exist!");
+                    return;
+                }
 
                 productDAO.updateProduct(product);
                 System.out.println("Product updated successfully!");
@@ -188,13 +202,24 @@ public class Main {
     private static void viewAllProducts() {
         try {
             List<Product> products = productDAO.getAllProducts();
+            if (products.isEmpty()) {
+                System.out.println("No products found.");
+                return;
+            }
+
             System.out.println("\nProducts:");
             for (Product product : products) {
                 Supplier supplier = supplierDAO.getSupplierById(product.getSupplierId());
-                System.out.println(product + ", Supplier: " + (supplier != null ? supplier.getName() : "Unknown"));
+                System.out.printf(
+                        "Product [ID=%d, Name=%s, SupplierID=%d], Supplier: %s%n",
+                        product.getId(),
+                        product.getName(),
+                        product.getSupplierId(),
+                        supplier != null ? supplier.getName() : "Unknown"
+                );
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Error retrieving products: " + e.getMessage());
         }
     }
 
@@ -283,6 +308,24 @@ public class Main {
             System.out.println("\nSuppliers:");
             for (Supplier supplier : suppliers) {
                 System.out.println(supplier);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    private static void viewProductsBySupplier() {
+        System.out.print("\nEnter supplier ID: ");
+        int supplierId = scanner.nextInt();
+        try {
+            if (!supplierDAO.supplierExists(supplierId)) {
+                System.out.println("Supplier with ID " + supplierId + " does not exist!");
+                return;
+            }
+
+            List<Product> products = productDAO.getProductsBySupplier(supplierId);
+            System.out.println("\nProducts for supplier " + supplierId + ":");
+            for (Product product : products) {
+                System.out.println(product);
             }
         } catch (SQLException e) {
             e.printStackTrace();
