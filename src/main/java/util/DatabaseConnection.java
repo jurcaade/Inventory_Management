@@ -20,7 +20,9 @@ public class DatabaseConnection {
                             "description TEXT, " +
                             "price REAL NOT NULL, " +
                             "quantity INTEGER NOT NULL, " +
-                            "category TEXT)"
+                            "category TEXT, " +
+                            "supplierId INTEGER, " +
+                            "FOREIGN KEY (supplierId) REFERENCES suppliers(id))"
             );
 
             conn.createStatement().execute(
@@ -34,4 +36,5 @@ public class DatabaseConnection {
             e.printStackTrace();
         }
     }
+
 }

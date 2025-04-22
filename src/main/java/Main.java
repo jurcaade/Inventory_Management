@@ -106,8 +106,8 @@ public class Main {
 
     private static void addProduct() {
         System.out.println("\nEnter product details:");
-        int id = getValidIntInput("ID: ");  // Use the helper method to validate integer input
-        scanner.nextLine();  // Consume the newline character
+        int id = getValidIntInput("ID: ");
+        scanner.nextLine();
 
         System.out.print("Name: ");
         String name = scanner.nextLine();
@@ -123,7 +123,12 @@ public class Main {
         System.out.print("Category: ");
         String category = scanner.nextLine();
 
-        Product product = new Product(id, name, description, price, quantity, category);
+
+        System.out.println("Select Supplier ID from the list of suppliers:");
+        viewAllSuppliers();
+        int supplierId = getValidIntInput("Enter Supplier ID: ");
+
+        Product product = new Product(id, name, description, price, quantity, category, supplierId);
         try {
             productDAO.addProduct(product);
             System.out.println("Product added successfully!");
@@ -131,6 +136,7 @@ public class Main {
             e.printStackTrace();
         }
     }
+
 
 
     private static void updateProduct() {
@@ -184,12 +190,14 @@ public class Main {
             List<Product> products = productDAO.getAllProducts();
             System.out.println("\nProducts:");
             for (Product product : products) {
-                System.out.println(product);
+                Supplier supplier = supplierDAO.getSupplierById(product.getSupplierId());
+                System.out.println(product + ", Supplier: " + (supplier != null ? supplier.getName() : "Unknown"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     private static void findProductById() {
         System.out.print("\nEnter product ID to search: ");

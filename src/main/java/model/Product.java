@@ -7,17 +7,19 @@ public class Product {
     private double price;
     private int quantityInStock;
     private String category;
+    private int supplierId;
 
     public Product() {
     }
 
-    public Product(int id, String name, String description, double price, int quantityInStock, String category) {
+    public Product(int id, String name, String description, double price, int quantityInStock, String category, int supplierId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.quantityInStock = quantityInStock;
         this.category = category;
+        this.supplierId = supplierId;
     }
 
     public int getId() {
@@ -69,8 +71,17 @@ public class Product {
         this.category = category;
     }
 
+    public int getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(int supplierId) {
+        this.supplierId = supplierId;
+    }
+
     @Override
     public String toString() {
-        return "Product [id=" + id + ", name=" + name + ", price=" + price + ", stock=" + quantityInStock + "]";
+        return "Product [ID=" + id + ", Name=" + name + ", Description=" + description + ", Price=" + price
+                + ", Quantity=" + quantityInStock + ", Category=" + category + ", SupplierID=" + supplierId + "]";
     }
 }

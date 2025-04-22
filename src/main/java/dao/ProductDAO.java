@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ProductDAO {
     public void addProduct(Product product) throws SQLException {
-        String sql = "INSERT INTO products (id, name, description, price, quantity, category) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO products (id, name, description, price, quantity, category, supplierId) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, product.getId());
@@ -18,6 +18,7 @@ public class ProductDAO {
             stmt.setDouble(4, product.getPrice());
             stmt.setInt(5, product.getQuantityInStock());
             stmt.setString(6, product.getCategory());
+            stmt.setInt(7, product.getSupplierId());  // Insert supplierId
             stmt.executeUpdate();
         }
     }
